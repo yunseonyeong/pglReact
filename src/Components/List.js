@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 
 const List = ({id,title,edit,completed,todoData,setTodoData,provided,snapshot,handleRemove}) => {
 
-  const [newTitle, setNewTitle] = useState("title");
+  const [newTitle, setNewTitle] = useState(title);
 
   const handleCompletedChange = (id) => {
     let newTodoData = todoData.map((data) => {
