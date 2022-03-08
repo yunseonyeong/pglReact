@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Form ({value, setValue, handleSubmit}) {
+const Form = ({value, setValue, handleSubmit}) => {
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -17,7 +17,7 @@ export default function Form ({value, setValue, handleSubmit}) {
         onChange={handleChange}
       />
       <button
-        className="w-1/5 p-2 hover:text-white hover:bg-blue-200 text-blue-400 border-2  border-blue-400 rounded"
+        className="w-1/5 p-2 hover:text-white hover:bg-blue-200 text-blue-400 border-2  border-blue-400  rounded"
         onClick={() => {
           handleSubmit(value);
         }}>
@@ -25,4 +25,6 @@ export default function Form ({value, setValue, handleSubmit}) {
       </button>
     </div>
   );
-};
+}
+
+export default Form;

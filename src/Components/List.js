@@ -1,7 +1,9 @@
-import React from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import React, {useState} from 'react';
 
-export default function List ({todoData, setTodoData}) {
+
+const List = ({id,title,edit,completed,todoData,setTodoData,provided,snapshot,handleRemove}) => {
+
+  const [newTitle, setNewTitle] = useState("title");
 
   const handleCompletedChange = (id) => {
     let newTodoData = todoData.map((data) => {
@@ -13,76 +15,107 @@ export default function List ({todoData, setTodoData}) {
     setTodoData(newTodoData);
   };
 
-   const handleClick = (id) => {
-     let newTodo = [...todoData];
-     newTodo = newTodo.filter((data) => data.id !== id);
-     setTodoData(newTodo);
-   };
 
-  const handleEnd = (result) => {
-    const newTodoData = [...todoData];
-    // 드래그드랍 하기 전 위치를 지운다., reorderdItem 에는 삭제된 요소(인덱스 아니고) 값이 담긴다.
-    // splice(시작인덱스, 몇개 지울 지, 뭐 추가할지)
-    const [reorderedItem] = newTodoData.splice(result.source.index, 1);
-    // 그 요소 값을 드랍한 위치로 삽입해 옮긴다.
-    newTodoData.splice(result.destination.index,0,reorderedItem);
-    setTodoData(newTodoData);
-  }  
-  
-   
+  // 수정 버튼 클릭시 상태 true, false 로 변화
+  // 나중에 true면 input 보이게, false면 title 보이게 할거야.
+
+  const editNewTitle = (id, newTitle) => {
+    let newTodo = todoData.map((data) =>{
+      if (data.id === id){
+          data.title = newTitle;
+      }
+      return data;
+    });
+    setTodoData(newTodo);
+  };
+
+  const handleEdit = (id) => {
+    let newTodo = todoData.map((data) => {
+      if (data.id === id) {
+        data.edit=!data.edit; 
+      }
+      return data;
+    });
+    setTodoData(newTodo);
+  };
+  //  새로 입력한 값으로 todoData의 title을 바꿔준다. 
+
+
+
   return (
-    <div>
-      <DragDropContext onDragEnd={handleEnd}>
-        <Droppable droppableId="todo">
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {todoData.map((data,index) => (
-                <Draggable
-                  key={data.id}
-                  draggableId={data.id.toString()}
-                  index={index}
-                >
-                  {(provided, snapshot)=>(
-                      <div className={`${snapshot.isDragging ? "bg-gray-400" : "bg-gray-100"} flex items-center justify-between w-full px-4 py-1 my-2 text-gray-600 bg-gray-100 border rounded`}
-                      key={data.id} {...provided.draggableProps} 
-                      ref={provided.innerRef} {...provided.dragHandleProps}>
-                        <div className="items-center ">
-                          <input
-                            type="checkbox"
-                            defaultChecked={data.completed}
-                            onChange={() => {
-                              handleCompletedChange(data.id);
-                            }}
-                          />
-                          <span
-                            className={
-                              `${data.completed ? "line-through" : undefined} px-2`
-                            }
-                          >
-                            {data.title}
-                          </span>
-                        </div>
-                        <div className="items-center">
-                          <button
-                            className="px-4 py-2 float-right"
-                            onClick={() => {
-                              handleClick(data.id);
-                            }}
-                          >
-                            x
-                          </button>
-                        </div>
-                      </div>
-                    )
-                  }
-                </Draggable>
-              ))}
-              {provided.placeholder}
-              {/*placeholder 속성은 목록에 빈 공간 만들어서 드래그 드랍할 때 좀 자연스러워짐 */}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+    <div
+      className={`${
+        snapshot.isDragging ? "bg-gray-400" : "bg-gray-100"
+      } flex items-center justify-between w-full px-4 py-1 my-2 text-gray-600 bg-gray-100 border rounded`}
+      key={id}
+      {...provided.draggableProps}
+      ref={provided.innerRef}
+      {...provided.dragHandleProps}
+    >
+      <div className="items-center ">
+        <input
+          type="checkbox"
+          defaultChecked={completed}
+          onChange={() => {
+            handleCompletedChange(id);
+          }}
+        />
+        {edit ? (
+          <>
+            <input
+              type="text"
+              className="w-4/5 px-3 py-2 mr-4 text-gray-500 border rounded shadow"
+              value={newTitle}
+              onChange={(e) => {
+                setNewTitle(e.target.value);
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <span className={`${completed ? "line-through" : undefined} px-2`}>
+              {title}
+            </span>
+          </>
+        )}
+      </div>
+      <div className="items-center">
+        <button
+          className="px-4 py-2 float-right"
+          onClick={() => {
+            handleRemove(id);
+          }}
+        >
+          x
+        </button>
+        {edit ? (
+          <>
+            <button
+              className="px-4 py-2 float-right"
+              onClick={() => {
+                
+                editNewTitle(id,newTitle);
+                handleEdit(id);
+              }}
+            >
+              완료
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              className="px-4 py-2 float-right"
+              onClick={() => {
+                handleEdit(id);
+              }}
+            >
+              edit
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
+
+export default List;
