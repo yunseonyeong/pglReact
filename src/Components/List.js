@@ -13,6 +13,7 @@ const List = ({id,title,edit,completed,todoData,setTodoData,provided,snapshot,ha
       return data;
     });
     setTodoData(newTodoData);
+    console.log(todoData);
   };
 
 
@@ -93,7 +94,6 @@ const List = ({id,title,edit,completed,todoData,setTodoData,provided,snapshot,ha
             <button
               className="px-4 py-2 float-right"
               onClick={() => {
-                
                 editNewTitle(id,newTitle);
                 handleEdit(id);
               }}

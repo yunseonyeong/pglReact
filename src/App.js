@@ -11,6 +11,7 @@ export default function App () {
 
   const handleSubmit = (value) => {
     let newTodo = {
+      id : Date.now(),
       title: value,
       completed: false,
       edit:false, 
