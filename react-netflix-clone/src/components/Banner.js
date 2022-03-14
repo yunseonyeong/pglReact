@@ -2,9 +2,15 @@ import axios from '../api/axios.js';
 import React, {useState, useEffect} from 'react'
 import requests from '../api/request.js';
 import './Banner.css';
+import styled from "styled-components";
 
 const Banner = () => {
   const [movie, setMovie] = useState([]);
+  const [isClicked, setIsClicked] = useState(false);
+
+ 
+
+
   useEffect(()=>{
     fetchData();
   }, []);
@@ -35,35 +41,57 @@ const Banner = () => {
     
     setMovie(movieDetail);
   };
-  return (
-    <header
-      className="banner"
-      style={{
-        backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie.backdrop_path}")`,
-        backgroundPosition: "top center",
-        backgroundSize: "cover",
-      }}
-    >
-      <div className="banner__contents">
-        <h1 className="banner__title">
-          {movie.title || movie.name || movie.original_name}
-        </h1>
 
-        <div className="banner__buttons">
-          <button
-            className="banner__button play"
-            // onClick={() => setIsClicked(true)}
-          >
-            Play
-          </button>
-          <button className="banner__button info">More Information</button>
+  if (!isClicked){
+    return (
+      <header
+        className="banner"
+        style={{
+          backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie.backdrop_path}")`,
+          backgroundPosition: "top center",
+          backgroundSize: "cover",
+        }}
+      >
+        <div className="banner__contents">
+          <h1 className="banner__title">
+            {movie.title || movie.name || movie.original_name}
+          </h1>
+
+          <div className="banner__buttons">
+            <button
+              className="banner__button play"
+              onClick={() => setIsClicked(true)}
+            >
+              Play
+            </button>
+            <button className="banner__button info">More Information</button>
+          </div>
+
+          <h1 className="banner__description">
+            {truncate(movie.overview, 100)}
+          </h1>
         </div>
-
-        <h1 className="banner__description">{truncate(movie.overview,100)}</h1>
-      </div>
-      <div className="banner--fadeBottom" />
-    </header>
-  );
+        <div className="banner--fadeBottom" />
+      </header>
+    );
+  }
+  else{
+    return (<Container><HomeContainer>clicked</HomeContainer></Container>);
+    
+  }
 }
 
+// styled Component
+const Container = styled.div`
+  display:flex;
+  justify-content:center;
+  align-items : center;
+  flex-direction : column;
+  width: 100%;
+  height: 100vh;  
+`;
+const HomeContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 export default Banner;
