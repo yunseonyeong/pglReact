@@ -7,7 +7,7 @@ import styled from "styled-components";
 const Banner = () => {
   const [movie, setMovie] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
-
+  
  
 
 
