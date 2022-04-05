@@ -45,6 +45,7 @@ function Row({title, id, fetchUrl, isLargeRow}) {
                 isLargeRow ? movie.poster_path : movie.backdrop_path
               }`}
               alt={movie.name}
+              /* 이미지 클릭 시, 해당 movie 와 관련된 모달 open 제어 해주고, 영화 정보도 저장하기 위해서 */
               onClick={()=> handleClick(movie)}
             />
           ))}
@@ -62,6 +63,7 @@ function Row({title, id, fetchUrl, isLargeRow}) {
       </div>
 
       {
+        // {...movieSelected : 이미지 클릭된 영화 정보가 다 담겨 있다. 이걸 props로 넘겨준다. 어디에 ? MovieModal 컴포넌트에 ! }
         modalOpen &&  (<MovieModal {...movieSelected} setModalOpen={setModalOpen} />)
       }
     </section>
